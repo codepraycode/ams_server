@@ -81,6 +81,31 @@ class AssociationManager(BaseUserManager):
 
         association.save()
         return association
+    
+    def authenticate(self, **data):
+
+        email = data.get('email', None)
+        password = data.get('password', None)
+
+        if email is None:
+            raise TypeError('Association email is required')
+        
+        if password is None:
+            raise TypeError('Association password is required')
+        
+        try:
+            association = self.model.objects.get(email=self.normalize_email(email))
+            # association = Association.objects.get(
+            #     email=email, password=password)
+        except self.model.DoesNotExist:
+            return None
+
+        valid_password = association.check_password(password)
+        
+        if not valid_password:
+            return None
+
+        return association
 
 
 class Association(AssociationModelBase):

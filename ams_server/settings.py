@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'api.apps.ApiConfig',
     'association.apps.AssociationConfig',
 
     'rest_framework',
@@ -116,6 +117,7 @@ REST_FRAMEWORK = {
     # 'NON_FIELD_ERRORS_KEY': 'error',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'api.authentication.TokenAuthentication',
     )
 }
 
