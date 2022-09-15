@@ -57,8 +57,8 @@ class ObtainAssociationAuthToken(APIView):
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = AssociationAuthToken.objects.get_or_create(user=user)
+        association = serializer.validated_data['association']
+        token, created = AssociationAuthToken.objects.get_or_create(association=association)
         return Response({'token': token.key})
 
 

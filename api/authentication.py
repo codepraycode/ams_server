@@ -48,8 +48,9 @@ class TokenAuthentication(BaseAuthentication):
             msg = _(
                 'Invalid token header. Token string should not contain invalid characters.')
             raise exceptions.AuthenticationFailed(msg)
-
-        return self.authenticate_credentials(token)
+        association, _other = self.authenticate_credentials(token)
+        request.association = association
+        return (association, _other) # self.authenticate_credentials(token)
 
     def authenticate_credentials(self, key):
         model = self.get_model()

@@ -40,7 +40,7 @@ class AssociationModelBase(models.Model):
         abstract = True
 
     def __str__(self):
-        return self.get_username()
+        return self.name
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -69,8 +69,8 @@ class AssociationManager(BaseUserManager):
     # username, email, password=None,firstname="user", lastname="user"):
     def create_association(self, **data):
         
-        email = data.get('email', None)
-        password = data.get('password', None)
+        email = data.pop('email', None)
+        password = data.pop('password', None)
 
         if email is None:
             raise TypeError('Association email is required')
@@ -115,8 +115,8 @@ class Association(AssociationModelBase):
     name = models.CharField(
         verbose_name="Associatin name", max_length=255, blank=False, null=False)
 
-    contacts = models.CharField(
-        verbose_name="Contacts", max_length=100, null=False)
+    contact = models.CharField(
+        verbose_name="Contact", max_length=100, null=False)
     email = models.EmailField(max_length=255, unique=True, db_index=True)
 
     town = models.CharField(
