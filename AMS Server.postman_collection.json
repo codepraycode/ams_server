@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "b44c3ca2-8fbc-4fe9-8029-fc1b49e18e7b",
+		"name": "AMS Server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "authenticate",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Get association",
+			"request": {
+				"auth": {
+					"type": "hawk",
+					"hawk": [
+						{
+							"key": "algorithm",
+							"value": "sha256",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/association/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"association",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Association",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "logo",
+							"type": "file",
+							"src": "/C:/Users/User/Downloads/coffee_logo.png"
+						},
+						{
+							"key": "name",
+							"value": "Coffe sellers association",
+							"type": "default"
+						},
+						{
+							"key": "contact",
+							"value": "+234 80000000000",
+							"type": "default"
+						},
+						{
+							"key": "town",
+							"value": "Apo",
+							"type": "default"
+						},
+						{
+							"key": "city",
+							"value": "Ikeja",
+							"type": "default"
+						},
+						{
+							"key": "local_government",
+							"value": "Apo",
+							"type": "default"
+						},
+						{
+							"key": "country",
+							"value": "Nigeria",
+							"type": "default"
+						},
+						{
+							"key": "email",
+							"value": "coffee@gmail.com",
+							"type": "default"
+						},
+						{
+							"key": "password",
+							"value": "olusola70308",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/association/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"association",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://127.0.0.1:8000/api",
+			"type": "default"
+		}
+	]
+}
