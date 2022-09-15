@@ -10,5 +10,6 @@ This is the backend application offering services to user comsumable association
 - start project by running `python manage.py runserver`
 
 
+
 ## How to use
 A json file is included in the app which was exported from postman having all the endpoints available
