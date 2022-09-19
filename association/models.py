@@ -1,7 +1,7 @@
 from django.db import models
 
 from .models_utils import (
-    AssociationModelBase, AssociationManager, handle_upload_dir)
+    AssociationModelBase, AssociationManager, handle_upload_logo, handle_upload_passport)
 
 # from django.utils.crypto import get_random_string, salted_hmac
 # from django.conf import settings
@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 
 class Association(AssociationModelBase):
     logo = models.ImageField(
-        _("Logo"), upload_to=handle_upload_dir, null=True, blank=True)
+        _("Logo"), upload_to=handle_upload_logo, null=True, blank=True)
 
     name = models.CharField(
         verbose_name="Associatin name", max_length=255, blank=False, null=False)
@@ -59,11 +59,77 @@ class AssociationGroups(models.Model):
     )
 
     name = models.CharField(
-        verbose_name="Associatin name", max_length=255, blank=False, null=False)
+        verbose_name="Association name", max_length=255, blank=False, null=False)
 
     date_created = models.DateTimeField(auto_now_add=True, editable=True)
 
+
+    def __str__(self) -> str:
+        return f"{self.name} -- {self.association}"
     class Meta:
         db_table = "association_groups_tb"
         verbose_name = "Association group"
         verbose_name_plural = "Association groups"
+
+
+class AssociationMemeber(models.Model):
+    passport = models.ImageField(
+        _("Passport"), upload_to=handle_upload_passport, null=True, blank=True)
+
+    first_name = models.CharField(
+        verbose_name="Member first name", max_length=255, blank=False, null=False)
+    last_name = models.CharField(
+        verbose_name="Member last name", max_length=255, blank=False, null=False)
+    
+    group_no = models.CharField(
+        verbose_name="Member group number", max_length=100, blank=False, null=False)
+
+
+    group = models.ForeignKey(
+        AssociationGroups,
+        related_name="members",
+        on_delete=models.CASCADE
+    )
+
+    contact = models.CharField(
+        verbose_name="Member contact", max_length=100, null=False)
+    
+    gender = models.CharField(
+        verbose_name="Member gender", max_length=10, null=False)
+    
+    date_of_birth = models.DateField(verbose_name="Member date of birth", null=False)
+
+    religion = models.CharField(
+        verbose_name="Member religion", max_length=100, null=False)
+    
+    nationality = models.CharField(
+        verbose_name="Member nationality", max_length=100, null=False)
+    
+    state_of_origin = models.CharField(
+        verbose_name="Member state of origin", max_length=100, null=False)
+    
+    ethnicity = models.CharField(
+        verbose_name="Member ethnicity", max_length=100, null=False)
+    
+    local_government_of_origin = models.CharField(
+        verbose_name="Member local government of origin", max_length=100, null=False)
+    
+    occupation = models.CharField(
+        verbose_name="Member occupation", max_length=100, null=False)
+    
+    next_of_kin = models.CharField(
+        verbose_name="Member next of kin", max_length=100, null=False)
+    
+    date_joined = models.DateTimeField(auto_now_add=True, editable=True)
+
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+    
+    def __str__(self) -> str:
+        return f"{self.full_name} -- {self.group.association}"
+
+    class Meta:
+        db_table = "association_memeber_tb"
+        verbose_name = "Association Member"
+        verbose_name_plural = "Association Members"

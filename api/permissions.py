@@ -34,5 +34,22 @@ class IsAssociation(BasePermission):
                 return False
         except:
             return False
+
+        return super().has_object_permission(request, view, obj) 
+
+
+class IsAssociationMember(BasePermission):
+    """
+    Allows access only rightful association.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        
+        try:
+            if request.association.pk is not obj.group.association.pk:
+                return False
+        except:
+            return False
+
         
         return super().has_object_permission(request, view, obj) 

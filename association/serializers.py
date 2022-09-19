@@ -1,4 +1,3 @@
-# from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 
@@ -9,7 +8,7 @@ from rest_framework.validators import UniqueValidator
 from rest_framework import serializers
 
 # Models
-from .models import Association, AssociationGroups
+from .models import Association, AssociationGroups, AssociationMemeber
 
 # Exceptions
 from rest_framework.exceptions import ValidationError
@@ -34,6 +33,7 @@ class AssociationGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssociationGroups
         fields = (
+            'id',
             'association_id',
             'name',
             'url',
@@ -66,6 +66,7 @@ class AssociationGroupSerializer(serializers.ModelSerializer):
 class AssociationSerializer(serializers.ModelSerializer):
     logo = serializers.ImageField(
         label=_("Logo"),
+        required=True,
         # write_only=True
     )
     name = serializers.CharField(
@@ -108,6 +109,7 @@ class AssociationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Association
         fields = (
+            'id',
             'logo',
             'name',
             'contact',
@@ -132,4 +134,75 @@ class AssociationSerializer(serializers.ModelSerializer):
     
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
+
+
+class AssociationMemberSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField()
+
+    passport = serializers.ImageField(
+        label=_("Passport"),
+        required=False,
+        write_only=True
+    )
+    passport_url = serializers.SerializerMethodField()
+
+    group_id = serializers.PrimaryKeyRelatedField(
+        source="group",
+        write_only=True,
+        queryset=AssociationGroups.objects.all()
+    )
+
+    group_url = serializers.SerializerMethodField()
+
+    def get_url(self, obj):
+        request = self.context['request']
+
+        purl = reverse("associationmember-detail", kwargs={"pk": int(obj.pk)})
+
+        return request.build_absolute_uri(purl)
+
+    def get_group_url(self, obj):
+        request = self.context['request']
+
+        purl = reverse("associationgroup-detail", kwargs={"pk": int(obj.group.pk)})
+
+        return request.build_absolute_uri(purl)
+    
+    def get_passport_url(self, obj):
+        request = self.context['request']
+
+        purl = obj.passport.url
+
+        return request.build_absolute_uri(purl)
+    
+    class Meta:
+        model = AssociationMemeber
+        fields = (
+            'id',
+            'url',
+            'passport',
+            'passport_url',
+            'first_name',
+            'last_name',
+            'gender',
+            'occupation',
+
+            'group_no',
+            'group_id',
+            'group_url',
+
+            'contact',
+            
+            "date_of_birth",
+            'religion',
+            
+            'nationality',
+            'state_of_origin',
+            'ethnicity',
+            'local_government_of_origin',
+            
+            'next_of_kin',
+            'date_joined',
+        )
+
 

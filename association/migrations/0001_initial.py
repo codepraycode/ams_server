@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
-                ('logo', models.ImageField(blank=True, null=True, upload_to=association.models.handle_upload_dir, verbose_name='Logo')),
+                ('logo', models.ImageField(blank=True, null=True, upload_to=association.models.handle_upload_logo, verbose_name='Logo')),
                 ('name', models.CharField(max_length=255, verbose_name='Associatin name')),
                 ('contacts', models.CharField(max_length=100, verbose_name='Contacts')),
                 ('email', models.EmailField(db_index=True, max_length=255, unique=True)),

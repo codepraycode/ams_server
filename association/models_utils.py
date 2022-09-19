@@ -8,13 +8,21 @@ from django.utils.translation import gettext_lazy as _
 from os.path import splitext
 from time import time
 
-def handle_upload_dir(instance, filename):
+def handle_upload_logo(instance, filename):
     _, extension = splitext(filename.lower())
     date = str(time())
 
     date = date[:date.index('.')]
     # date_string = f"{date.year}_{date.month}_{date.day}_{}"
-    return f"img/{date}{extension}".lower()
+    return f"logo/{date}{extension}".lower()
+
+def handle_upload_passport(instance, filename):
+    _, extension = splitext(filename.lower())
+    date = str(time())
+
+    date = date[:date.index('.')]
+    # date_string = f"{date.year}_{date.month}_{date.day}_{}"
+    return f"passport/{date}{extension}".lower()
 
 # Create your models here.
 
