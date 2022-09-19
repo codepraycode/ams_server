@@ -6,268 +6,502 @@
 	},
 	"item": [
 		{
-			"name": "association_authenticate",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\":\"izian@mail.com \",\r\n    \"password\":\"olusola70308\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Association",
+			"item": [
+				{
+					"name": "association_get",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/association/1/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"association",
+								"1",
+								""
+							]
 						}
-					}
-				},
-				"url": {
-					"raw": "{{url}}/auth/",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"auth",
-						""
-					],
-					"query": [
-						{
-							"key": "email",
-							"value": "oreta@mail.com",
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "association_get",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
-						"type": "default"
-					}
-				],
-				"url": {
-					"raw": "{{url}}/association/1/",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"association",
-						"1",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "association_create",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "logo",
-							"type": "file",
-							"src": "/C:/Users/User/Downloads/coffee_logo.png"
-						},
-						{
-							"key": "name",
-							"value": "Coffe sellers association",
-							"type": "default"
-						},
-						{
-							"key": "contact",
-							"value": "+234 80000000000",
-							"type": "default"
-						},
-						{
-							"key": "town",
-							"value": "Apo",
-							"type": "default"
-						},
-						{
-							"key": "city",
-							"value": "Ikeja",
-							"type": "default"
-						},
-						{
-							"key": "local_government",
-							"value": "Apo",
-							"type": "default"
-						},
-						{
-							"key": "country",
-							"value": "Nigeria",
-							"type": "default"
-						},
-						{
-							"key": "email",
-							"value": "coffee@gmail.com",
-							"type": "default"
-						},
-						{
-							"key": "password",
-							"value": "olusola70308",
-							"type": "default"
-						}
-					]
-				},
-				"url": {
-					"raw": "{{url}}/association/",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"association",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "association_update",
-			"request": {
-				"method": "PATCH",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
-						"type": "default"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"contact\": \"+23 9149987823\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{url}}/association/1/",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"association",
-						"1",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "groups_create",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
-						"type": "default"
 					},
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "default"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"association_id\":1,\r\n    \"name\":\"Melani Street\"\r\n}"
+					"response": []
 				},
-				"url": {
-					"raw": "{{url}}/association/groups/",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"association",
-						"groups",
-						""
-					]
+				{
+					"name": "association_authenticate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"izian@mail.com \",\r\n    \"password\":\"olusola70308\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								""
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "oreta@mail.com",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "association_create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "logo",
+									"type": "file",
+									"src": "/C:/Users/User/Downloads/coffee_logo.png"
+								},
+								{
+									"key": "name",
+									"value": "Coffe sellers association",
+									"type": "default"
+								},
+								{
+									"key": "contact",
+									"value": "+234 80000000000",
+									"type": "default"
+								},
+								{
+									"key": "town",
+									"value": "Apo",
+									"type": "default"
+								},
+								{
+									"key": "city",
+									"value": "Ikeja",
+									"type": "default"
+								},
+								{
+									"key": "local_government",
+									"value": "Apo",
+									"type": "default"
+								},
+								{
+									"key": "country",
+									"value": "Nigeria",
+									"type": "default"
+								},
+								{
+									"key": "email",
+									"value": "coffee@gmail.com",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "olusola70308",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/association/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"association",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "association_update",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"contact\": \"+23 9149987823\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/association/1/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"association",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "groups_get",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
-						"type": "default"
+			"name": "Groups",
+			"item": [
+				{
+					"name": "groups_get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/association/groups/1/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"association",
+								"groups",
+								"1",
+								""
+							]
+						}
 					},
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "default"
-					}
-				],
-				"url": {
-					"raw": "{{url}}/association/groups/1/",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"association",
-						"groups",
-						"1",
-						""
-					]
+					"response": []
+				},
+				{
+					"name": "groups_update",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Melanir Street\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/association/groups/1/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"association",
+								"groups",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "groups_create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"association_id\":1,\r\n    \"name\":\"Melani Street\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/association/groups/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"association",
+								"groups",
+								""
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "groups_update",
-			"request": {
-				"method": "PATCH",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
-						"type": "default"
+			"name": "Members",
+			"item": [
+				{
+					"name": "members_get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/association/members/1/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"association",
+								"members",
+								"1",
+								""
+							]
+						}
 					},
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "default"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Melanir Street\"\r\n}"
+					"response": []
 				},
-				"url": {
-					"raw": "{{url}}/association/groups/1/",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"association",
-						"groups",
-						"1",
-						""
-					]
+				{
+					"name": "members_update",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"Manir\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/association/members/1/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"association",
+								"members",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "members_create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+								"key": "Content-Type",
+								"value": "multipart/form-data",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "passport",
+									"type": "file",
+									"src": "/C:/Users/User/Downloads/coffee_logo.png"
+								},
+								{
+									"key": "first_name",
+									"value": "Lajo",
+									"type": "default"
+								},
+								{
+									"key": "last_name",
+									"value": "Imole",
+									"type": "default"
+								},
+								{
+									"key": "gender",
+									"value": "male",
+									"type": "default"
+								},
+								{
+									"key": "occupation",
+									"value": "fisherman",
+									"type": "default"
+								},
+								{
+									"key": "group_no",
+									"value": "12",
+									"type": "default"
+								},
+								{
+									"key": "group_id",
+									"value": "1",
+									"type": "default"
+								},
+								{
+									"key": "contact",
+									"value": "+234 80000000",
+									"type": "default"
+								},
+								{
+									"key": "date_of_birth",
+									"value": "2022-02-02",
+									"type": "default"
+								},
+								{
+									"key": "religion",
+									"value": "Crhistian",
+									"type": "default"
+								},
+								{
+									"key": "nationality",
+									"value": "Nigerian",
+									"type": "default"
+								},
+								{
+									"key": "state_of_origin",
+									"value": "Lagos",
+									"type": "default"
+								},
+								{
+									"key": "ethnicity",
+									"value": "Yoruba",
+									"type": "default"
+								},
+								{
+									"key": "local_government_of_origin",
+									"value": "Lagos",
+									"type": "default"
+								},
+								{
+									"key": "next_of_kin",
+									"value": "Lajo Mary",
+									"type": "default"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/association/members/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"association",
+								"members",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "members_list",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"association_id\":1,\r\n    \"name\":\"Melani Street\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/association/members/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"association",
+								"members",
+								""
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	],
 	"event": [
