@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import Association
+from .models import Association, AssociationGroups
 
 from django.contrib.admin import ModelAdmin
 # Register your models here.
@@ -13,12 +13,11 @@ class AssociationAdmin(ModelAdmin):
     list_display = ('name', 'email', 'local_government', 'is_verified',
                     'is_active',)
     search_fields = ('name', 'email', )
-    # fieldsets = (
-    #     (None, {'fields': ('name', 'password')}),
-    #     (_('Personal info'), {
-    #      'fields': ('avatar', 'firstname', 'lastname', 'email')}),
-    #     (_('Permissions'), {
-    #         'fields': ('is_active', 'is_staff', 'is_verified', 'is_superuser', 'groups', 'user_permissions'),
-    #     }),
-    #     (_('Important dates'), {'fields': ('last_login',)}),
-    # )
+
+
+@admin.register(AssociationGroups)
+class AssociationGroupsAdmin(ModelAdmin):
+
+    list_display = ('association', 'name', 'date_created',)
+    search_fields = ('name',)
+

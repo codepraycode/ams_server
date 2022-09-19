@@ -6,25 +6,44 @@
 	},
 	"item": [
 		{
-			"name": "authenticate",
+			"name": "association_authenticate",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"izian@mail.com \",\r\n    \"password\":\"olusola70308\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/auth/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"auth",
+						""
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "oreta@mail.com",
+							"disabled": true
+						}
+					]
+				}
 			},
 			"response": []
 		},
 		{
-			"name": "Get association",
+			"name": "association_get",
 			"request": {
 				"auth": {
-					"type": "hawk",
-					"hawk": [
-						{
-							"key": "algorithm",
-							"value": "sha256",
-							"type": "string"
-						}
-					]
+					"type": "noauth"
 				},
 				"method": "GET",
 				"header": [
@@ -35,20 +54,21 @@
 					}
 				],
 				"url": {
-					"raw": "{{url}}/association/1",
+					"raw": "{{url}}/association/1/",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"association",
-						"1"
+						"1",
+						""
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Create Association",
+			"name": "association_create",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -109,6 +129,140 @@
 					],
 					"path": [
 						"association",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "association_update",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"contact\": \"+23 9149987823\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/association/1/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"association",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "groups_create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+						"type": "default"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"association_id\":1,\r\n    \"name\":\"Melani Street\"\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/association/groups/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"association",
+						"groups",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "groups_get",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+						"type": "default"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/association/groups/1/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"association",
+						"groups",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "groups_update",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+						"type": "default"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Melanir Street\"\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/association/groups/1/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"association",
+						"groups",
+						"1",
 						""
 					]
 				}

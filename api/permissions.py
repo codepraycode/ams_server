@@ -3,14 +3,36 @@ from rest_framework.permissions import BasePermission
 
 class IsAuthenticated(BasePermission):
     """
-    Allows access only to authenticated users.
+    Allows access only to authenticated association.
     """
 
     def has_permission(self, request, view):
-        return bool(request.association and request.association.is_active)
+        try:
+            return bool(request.association and request.association.is_active)
+        except:
+            return False
     
     def has_object_permission(self, request, view, obj):
-        if request.association.pk is not obj.pk:
+
+        try:
+            if request.association.pk is not obj.pk:
+                return False
+        except:
+            return False
+        
+        return super().has_object_permission(request, view, obj) 
+
+class IsAssociation(BasePermission):
+    """
+    Allows access only rightful association.
+    """
+
+    def has_object_permission(self, request, view, obj):
+
+        try:
+            if request.association.pk is not obj.pk:
+                return False
+        except:
             return False
         
         return super().has_object_permission(request, view, obj) 

@@ -20,7 +20,7 @@ class TestSetup(APITestCase):
     def setUp(self) -> None:
         self.login_url = reverse('association_auth')
         self.register_url = reverse('create_association')
-        self.association_url = lambda pk: reverse('rud_association', kwargs={"pk":pk})
+        self.association_url = lambda pk: reverse('association-detail', kwargs={"pk":pk})
 
         
 
