@@ -23,14 +23,12 @@
 							}
 						],
 						"url": {
-							"raw": "{{url}}/association/1/",
+							"raw": "{{url}}/association",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"association",
-								"1",
-								""
+								"association"
 							]
 						}
 					},
@@ -74,7 +72,13 @@
 					"name": "association_create",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							}
+						],
 						"body": {
 							"mode": "formdata",
 							"formdata": [
@@ -126,12 +130,13 @@
 							]
 						},
 						"url": {
-							"raw": "{{url}}/association/",
+							"raw": "{{url}}/association/create/",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"association",
+								"create",
 								""
 							]
 						}
@@ -271,6 +276,111 @@
 							"path": [
 								"association",
 								"groups",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Levies",
+			"item": [
+				{
+					"name": "levy_get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/account/levies/1/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"account",
+								"levies",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "levy_update",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"label\":\"Security\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/account/levies/1/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"account",
+								"levies",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "levy_create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"association_id\":1,\r\n    \"label\":\"Security\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/account/levies/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"account",
+								"levies",
 								""
 							]
 						}
@@ -495,6 +605,119 @@
 							"path": [
 								"association",
 								"members",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Charges",
+			"item": [
+				{
+					"name": "charge_create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"levy_id\":1,\r\n    \"amount\":2500\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/account/levies/1/charges/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"account",
+								"levies",
+								"1",
+								"charges",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "charge_list",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/account/levies/1/charges/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"account",
+								"levies",
+								"1",
+								"charges",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "charge_get",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"levy_id\":1,\r\n    \"amount\":2500\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/account/levies/1/charges/1/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"account",
+								"levies",
+								"1",
+								"charges",
+								"1",
 								""
 							]
 						}
