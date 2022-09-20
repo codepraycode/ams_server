@@ -11,9 +11,10 @@ from .views import (
 )
 
 urlpatterns = [
-    path('', view=CreateAssociation.as_view(), name="create-association"),
-    path('<int:pk>/', view=AssociationDetailView.as_view(),
+    path('', view=AssociationDetailView.as_view(),
          name="association-detail"),
+    path('create/', view=CreateAssociation.as_view(), name="create-association"),
+    
     
     path('groups/', view=CreateAssociationGroup.as_view(),
          name="create-association-group"),

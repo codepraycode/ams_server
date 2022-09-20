@@ -6,6 +6,7 @@ from rest_framework.validators import UniqueValidator
 
 # Serializers
 from rest_framework import serializers
+from account.serializers import LevySerializer
 
 # Models
 from .models import Association, AssociationGroups, AssociationMemeber
@@ -94,6 +95,7 @@ class AssociationSerializer(serializers.ModelSerializer):
     )
 
     groups = AssociationGroupSerializer(many=True, read_only=True)
+    levies = LevySerializer(many=True, read_only=True)
 
     email = serializers.EmailField(
         label=_("Email"),
@@ -117,8 +119,11 @@ class AssociationSerializer(serializers.ModelSerializer):
             'city',
             'local_government',
             'country',
+            
             "group_label",
             'groups',
+            'levies',
+
             'email',
             'password',
         )

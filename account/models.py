@@ -40,6 +40,7 @@ class AssociationLevy(models.Model):
         db_table = "association_levies_tb"
         verbose_name = "Association levy"
         verbose_name_plural = "Association levies"
+        unique_together=('association', 'label')
 
 
 class AssociationLevyCharge(models.Model):
@@ -70,7 +71,6 @@ class AssociationLevyCharge(models.Model):
         db_table = "association_charges_tb"
         verbose_name = "Association charge"
         verbose_name_plural = "Association charges"
-
 
 
 class AssociationPayment(models.Model):

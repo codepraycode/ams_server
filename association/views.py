@@ -1,5 +1,9 @@
-from rest_framework.generics import CreateAPIView, ListCreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import GenericAPIView, CreateAPIView, ListCreateAPIView, RetrieveUpdateAPIView
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from rest_framework.response import Response
+
+# # Mixins
+# from rest_framework.mixins import CreateModelMixin
 
 # Serializers
 from .serializers import AssociationSerializer, AssociationGroupSerializer, AssociationMemberSerializer
@@ -9,6 +13,8 @@ from .models import Association, AssociationGroups, AssociationMemeber
 
 # Permissions
 from api.permissions import IsAuthenticated, IsAssociation, IsAssociationMember
+
+
 class CreateAssociation(CreateAPIView):
     # POST
     serializer_class = AssociationSerializer
@@ -22,7 +28,30 @@ class AssociationDetailView(RetrieveUpdateAPIView):
     queryset = Association.objects.filter(is_active=True)
     permission_classes = (IsAuthenticated,)
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = request.association # self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+    
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = request.association  # self.get_object()
 
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+
+    
 
 class CreateAssociationGroup(CreateAPIView):
     # POST
