@@ -11,16 +11,6 @@ class IsAuthenticated(BasePermission):
             return bool(request.association and request.association.is_active)
         except:
             return False
-    
-    def has_object_permission(self, request, view, obj):
-
-        try:
-            if request.association.pk is not obj.pk:
-                return False
-        except:
-            return False
-        
-        return super().has_object_permission(request, view, obj) 
 
 class IsAssociation(BasePermission):
     """
@@ -64,6 +54,23 @@ class IsAssociationLevy(BasePermission):
         
         try:
             if request.association.pk is not obj.association.pk:
+                return False
+        except:
+            return False
+
+        
+        return super().has_object_permission(request, view, obj) 
+
+
+class IsAssociationLevyCharge(BasePermission):
+    """
+    Allows access only rightful association.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        
+        try:
+            if request.association.pk is not obj.levy.association.pk:
                 return False
         except:
             return False
