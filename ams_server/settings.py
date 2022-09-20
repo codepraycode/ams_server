@@ -42,7 +42,7 @@ INSTALLED_APPS = [
 
     'api.apps.ApiConfig',
     'association.apps.AssociationConfig',
-    # 'account.apps.AccountConfig',
+    'account.apps.AccountConfig',
 
     'rest_framework',
     'corsheaders',
