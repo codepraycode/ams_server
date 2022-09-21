@@ -723,6 +723,85 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "charge_payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"charge_id\":1,\r\n    \"member_id\":1,\r\n    \"amount_paid\":250,\r\n    \"date_paid\":\"2022-9-9 01:10\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/account/levies/1/charges/1/payment/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"account",
+								"levies",
+								"1",
+								"charges",
+								"1",
+								"payment",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "charge_members",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token c4032316e71027f4f26dc955b361e71a70eb85f9",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"levy_id\":1,\r\n    \"amount\":2500\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/account/levies/1/charges/1/members/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"account",
+								"levies",
+								"1",
+								"charges",
+								"1",
+								"members",
+								""
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
