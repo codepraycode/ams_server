@@ -110,3 +110,4 @@ class AssociationManager(BaseUserManager):
             return None
 
         return association
+

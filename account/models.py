@@ -95,7 +95,9 @@ class AssociationPayment(models.Model):
         max_digits=MAX_CHARGABLE
     )
 
-    date_paid = models.DateTimeField(auto_now_add=True, editable=True)
+    date_paid = models.DateTimeField(null=False, blank=False)
+    date_created = models.DateTimeField(auto_now_add=True, editable=True)
+
 
     def __str__(self) -> str:
         return f"{self.amount} -- {self.charge} -- {self.member} -- {self.date_paid}"

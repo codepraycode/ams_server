@@ -119,13 +119,13 @@ class AssociationSerializer(serializers.ModelSerializer):
             'city',
             'local_government',
             'country',
+
+            'email',
+            'password',
             
             "group_label",
             'groups',
             'levies',
-
-            'email',
-            'password',
         )
 
 
