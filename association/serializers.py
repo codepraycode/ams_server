@@ -73,6 +73,9 @@ class AssociationSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
         label=_("Name"),
     )
+    registration_id = serializers.CharField(
+        label=_("Registration Id"),
+    )
     contact = serializers.CharField(
         label=_("Contact"),
     )
@@ -114,6 +117,7 @@ class AssociationSerializer(serializers.ModelSerializer):
             'id',
             'logo',
             'name',
+            'registration_id',
             'contact',
             'town',
             'city',
@@ -128,18 +132,9 @@ class AssociationSerializer(serializers.ModelSerializer):
             'levies',
         )
 
-
-    # def create(self, validated_data):
-    #     instance = Association.objects.create_association(**validated_data)
-
-    #     return instance
-
     def create(self, validated_data):
-        return super().create(validated_data)
-    
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
-
+        # return super().create(validated_data)
+        return Association.objects.create_association(**validated_data)
 
 class AssociationMemberSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
@@ -151,13 +146,14 @@ class AssociationMemberSerializer(serializers.ModelSerializer):
     )
     passport_url = serializers.SerializerMethodField()
 
-    group_id = serializers.PrimaryKeyRelatedField(
-        source="group",
+    group = serializers.PrimaryKeyRelatedField(
+        source="member_group",
         write_only=True,
         queryset=AssociationGroups.objects.all()
     )
 
     group_url = serializers.SerializerMethodField()
+    topup_url = serializers.SerializerMethodField()
 
     def get_url(self, obj):
         request = self.context['request']
@@ -169,7 +165,15 @@ class AssociationMemberSerializer(serializers.ModelSerializer):
     def get_group_url(self, obj):
         request = self.context['request']
 
-        purl = reverse("associationgroup-detail", kwargs={"pk": int(obj.group.pk)})
+        purl = reverse("associationgroup-detail",
+                       kwargs={"pk": int(obj.member_group.pk)})
+
+        return request.build_absolute_uri(purl)
+    
+    def get_topup_url(self, obj):
+        request = self.context['request']
+
+        purl = reverse("member-topup")
 
         return request.build_absolute_uri(purl)
     
@@ -192,7 +196,7 @@ class AssociationMemberSerializer(serializers.ModelSerializer):
             'gender',
             'occupation',
 
-            'group_no',
+            'group',
             'group_id',
             'group_url',
 

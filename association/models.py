@@ -1,3 +1,4 @@
+from enum import unique
 from django.db import models
 
 from .models_utils import (
@@ -14,7 +15,9 @@ class Association(AssociationModelBase):
         _("Logo"), upload_to=handle_upload_logo, null=True, blank=True)
 
     name = models.CharField(
-        verbose_name="Associatin name", max_length=255, blank=False, null=False)
+        verbose_name="Association name", max_length=255, blank=False, null=False)
+    registration_id = models.CharField(
+        verbose_name="Association registration", max_length=255, blank=False, null=False)
 
     contact = models.CharField(
         verbose_name="Contact", max_length=100, null=False)
@@ -81,11 +84,11 @@ class AssociationMemeber(models.Model):
     last_name = models.CharField(
         verbose_name="Member last name", max_length=255, blank=False, null=False)
     
-    group_no = models.CharField(
-        verbose_name="Member group number", max_length=100, blank=False, null=False)
+    group_id = models.CharField(
+        verbose_name="Member group identification", max_length=100, blank=False, null=False)
 
 
-    group = models.ForeignKey(
+    member_group = models.ForeignKey(
         AssociationGroups,
         related_name="members",
         on_delete=models.CASCADE
@@ -119,6 +122,8 @@ class AssociationMemeber(models.Model):
     
     next_of_kin = models.CharField(
         verbose_name="Member next of kin", max_length=100, null=False)
+    next_of_kin_contact = models.CharField(
+        verbose_name="Member next of kin contact", max_length=100, null=False)
     
     date_joined = models.DateTimeField(auto_now_add=True, editable=True)
 
@@ -127,7 +132,7 @@ class AssociationMemeber(models.Model):
         return f"{self.first_name} {self.last_name}"
     
     def __str__(self) -> str:
-        return f"{self.full_name} -- {self.group.association}"
+        return f"{self.full_name} -- {self.member_group.association}"
     
     @classmethod
     def get_charge_members(cls, charge, payments_associated_with_charge):

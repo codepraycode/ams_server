@@ -73,10 +73,38 @@ class AssociationLevyCharge(models.Model):
         verbose_name_plural = "Association charges"
 
 
-class AssociationPayment(models.Model):
 
+class AssociationMemberAccount(models.Model):
     member = models.ForeignKey(
         AssociationMemeber,
+        related_name="account",
+        on_delete=models.CASCADE
+    )
+
+    balance = models.DecimalField(
+        verbose_name="Account balance",
+        blank=False,
+        null=False,
+        decimal_places=2,
+        max_digits=MAX_CHARGABLE
+    )
+
+    last_updated = models.DateTimeField(auto_now_add=True, editable=True)
+
+    def __str__(self) -> str:
+        return f"{self.member} -- {self.balance}"
+
+    class Meta:
+        db_table = "association_member_account_tb"
+        verbose_name = "Association member account"
+        verbose_name_plural = "Association member accounts"
+
+
+# Member payment model, covering topup and charge payment
+class AssociationMemberTransaction(models.Model):
+
+    member_account = models.ForeignKey(
+        AssociationMemberAccount,
         related_name="transactions",
         on_delete=models.CASCADE
     )
@@ -84,7 +112,10 @@ class AssociationPayment(models.Model):
     charge = models.ForeignKey(
         AssociationLevyCharge,
         related_name="payments",
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        default=None,
+        null=True,
+        blank=True,
     )
 
     amount = models.DecimalField(
@@ -95,14 +126,26 @@ class AssociationPayment(models.Model):
         max_digits=MAX_CHARGABLE
     )
 
+    topup = models.BooleanField(default=False) # indicates if it is credit(true) or debit(false)
+
+
+    def save(self, *args, **kwargs) -> None:
+        
+        if self.topup: # that is, if it is a credit kind of transaction
+            # Update member account balance
+            self.member_account.balance += self.amount
+            self.member_account.save()
+        
+        return super().save(*args, **kwargs)
+
     date_paid = models.DateTimeField(null=False, blank=False)
     date_created = models.DateTimeField(auto_now_add=True, editable=True)
 
 
     def __str__(self) -> str:
-        return f"{self.amount} -- {self.charge} -- {self.member} -- {self.date_paid}"
+        return f"{self.amount} -- {self.charge} -- {self.member_account.member} -- {self.date_paid}"
 
     class Meta:
-        db_table = "association_payments_tb"
-        verbose_name = "Association payment"
-        verbose_name_plural = "Association payments"
+        db_table = "association_transactions_tb"
+        verbose_name = "Association transaction"
+        verbose_name_plural = "Association transactions"

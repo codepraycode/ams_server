@@ -10,9 +10,9 @@ from django.contrib.admin import ModelAdmin
 @admin.register(Association)
 class AssociationAdmin(ModelAdmin):
 
-    list_display = ('name', 'email', 'local_government', 'is_verified',
+    list_display = ('name', 'email','registration_id', 'local_government', 'is_verified',
                     'is_active',)
-    search_fields = ('name', 'email', )
+    search_fields = ('name', 'email', 'registration_id')
 
 
 @admin.register(AssociationGroups)

@@ -1,9 +1,9 @@
-from rest_framework.generics import GenericAPIView, ListAPIView, ListCreateAPIView, CreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView, CreateAPIView, RetrieveUpdateAPIView
 from rest_framework.response import Response
 from rest_framework import status
 
 # Mixins
-from rest_framework.mixins import ListModelMixin
+# from rest_framework.mixins import ListModelMixin
 # Parsers
 from rest_framework.parsers import (MultiPartParser, FormParser, JSONParser)
 
@@ -19,7 +19,7 @@ from .serializers import (LevySerializer,
 
 # Models
 from .models import (
-    AssociationLevy, AssociationLevyCharge, AssociationPayment)
+    AssociationLevy, AssociationLevyCharge, AssociationMemberTransaction)
 from account.models import AssociationMemeber
 
 # Create your views here.
@@ -51,13 +51,15 @@ class LevyChargesDetailView(RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated, IsAssociationLevyCharge,)
     queryset = AssociationLevyCharge.objects.all()
 
-
-class LevyChargePaymentView(CreateAPIView):
+# Member transaction view
+class MemberPaymentView(CreateAPIView):
+    # Cover levy paryment, and account topup
+    
     # Create and list levies
     serializer_class = CreateAssociationPaymentSerializer
     # parser_classes = (MultiPartParser, FormParser, JSONParser,)
     permission_classes = (IsAuthenticated,)
-    queryset = AssociationPayment.objects.all()
+    queryset = AssociationMemberTransaction.objects.all()
 
 
 class LevyChargeMembersView(ListAPIView):
@@ -92,7 +94,8 @@ class LevyChargeMembersView(ListAPIView):
             return Response({"message": "Charge not found"}, status=status.HTTP_404_NOT_FOUND)
 
         # load all payments associated with charge
-        payments_associated_with_charge = AssociationPayment.objects.filter(charge=charge)
+        payments_associated_with_charge = AssociationMemberTransaction.objects.filter(
+            charge=charge)
         
         # At this point, all is set for operation
         # queryset = self.get_queryset().filter(group__association = charge.levy.association)

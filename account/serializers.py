@@ -3,7 +3,13 @@ from rest_framework import serializers
 
 # Models
 from association.models import Association, AssociationMemeber
-from .models import AssociationLevy, AssociationLevyCharge, MAX_CHARGABLE, AssociationPayment
+from .models import (
+    AssociationLevy, 
+    AssociationLevyCharge, 
+    MAX_CHARGABLE, 
+    AssociationMemberTransaction, 
+    AssociationMemberAccount
+)
 
 class LevySerializer(serializers.ModelSerializer):
 
@@ -104,7 +110,6 @@ class LevyChargeSerializer(serializers.ModelSerializer):
         return request.build_absolute_uri(purl)
 
 
-
 class AssociationMemberSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     url = serializers.SerializerMethodField()
@@ -172,7 +177,6 @@ class AssociationMemberSerializer(serializers.Serializer):
         )
 
 
-
 class CreateAssociationPaymentSerializer(serializers.ModelSerializer):
 
     # Posting payment
@@ -182,9 +186,9 @@ class CreateAssociationPaymentSerializer(serializers.ModelSerializer):
         source="charge",
         queryset=AssociationLevyCharge.objects.all()
     )
-    member_id = serializers.PrimaryKeyRelatedField(
-        source="member",
-        queryset=AssociationMemeber.objects.all()
+    member_account_id = serializers.PrimaryKeyRelatedField(
+        source="member_account",
+        queryset=AssociationMemberAccount.objects.all()
     )
     amount_paid = serializers.DecimalField(
         source="amount",
@@ -192,15 +196,16 @@ class CreateAssociationPaymentSerializer(serializers.ModelSerializer):
         min_value=0.00,
         decimal_places=2
     )
-
+    topup = serializers.BooleanField(default=False)
 
 
     class Meta:
-        model = AssociationPayment
+        model = AssociationMemberTransaction
         fields = (
             'charge_id',
             'member_id',
             'amount_paid',
+            'topup',
             'date_paid',
             'date_created',
         )

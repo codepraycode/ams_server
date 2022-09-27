@@ -4,7 +4,7 @@ from .views import (LeviesView,
                     LevyChargesView,
                     LevyChargesDetailView,
                     LevyChargeMembersView,
-                    LevyChargePaymentView,
+                    MemberPaymentView,
 )
 
 urlpatterns = [
@@ -21,6 +21,9 @@ urlpatterns = [
     path('levies/<int:levyId>/charges/<int:chargeId>/members/', view=LevyChargeMembersView.as_view(),
          name="levychargemembers-detail"),
     
-    path('levies/<int:levyId>/charges/<int:chargeId>/payment/', view=LevyChargePaymentView.as_view(),
+    path('levies/<int:levyId>/charges/<int:chargeId>/payment/', view=MemberPaymentView.as_view(),
          name="levycharge-payment"),
+    
+    path('member/topup/', view=MemberPaymentView.as_view(),
+         name="member-topup"),
 ]

@@ -62,9 +62,11 @@ class AssociationModelBase(models.Model):
         """
         def setter(raw_password):
             self.set_password(raw_password)
+            
             # Password hash upgrades shouldn't be considered password changes.
             self._password = None
             self.save(update_fields=["password"])
+        # print(raw_password,  self.password, self._password)
         return check_password(raw_password, self.password, setter)
 
 
@@ -96,15 +98,17 @@ class AssociationManager(BaseUserManager):
         if password is None:
             raise TypeError('Association password is required')
 
-        try:
+        try:            
             association = self.model.objects.get(
                 email=self.normalize_email(email))
+            
             # association = Association.objects.get(
             #     email=email, password=password)
         except self.model.DoesNotExist:
             return None
 
         valid_password = association.check_password(password)
+        
 
         if not valid_password:
             return None

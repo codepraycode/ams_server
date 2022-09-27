@@ -1,6 +1,7 @@
 from rest_framework.generics import GenericAPIView, CreateAPIView, ListCreateAPIView, RetrieveUpdateAPIView
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.response import Response
+from rest_framework import status
 
 # # Mixins
 # from rest_framework.mixins import CreateModelMixin
@@ -16,10 +17,26 @@ from api.permissions import IsAuthenticated, IsAssociation, IsAssociationMember
 
 
 class CreateAssociation(CreateAPIView):
-    # POST
+    # POST, GET(to verify registration id)
     serializer_class = AssociationSerializer
     parser_classes = (MultiPartParser, FormParser, JSONParser,)
-    
+
+    # def post(self, request, *args, **kwargs):
+    #     return self.create(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        # verify if reg_id hasn't been used
+        reg_id = request.GET.get('reg_id', None)
+
+        if not reg_id:
+            return Response({"message":"No reg id to validate"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        exists = Association.objects.filter(registration_id=reg_id).exists()
+
+        if exists:
+            return Response({"message": "Associtation with registration id already exist in system"}, status=status.HTTP_409_CONFLICT)
+        
+        return Response({"message":"Validated!"}, status=status.HTTP_200_OK)
 
 class AssociationDetailView(RetrieveUpdateAPIView):
     # GET, PUT, PATCH

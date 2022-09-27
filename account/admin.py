@@ -1,6 +1,11 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import AssociationLevy, AssociationLevyCharge, AssociationPayment
+from .models import (
+    AssociationLevy, 
+    AssociationLevyCharge, 
+    AssociationMemberAccount,
+    AssociationMemberTransaction
+)
 
 from django.contrib.admin import ModelAdmin
 
@@ -23,9 +28,17 @@ class AssociationLevyChargeAdmin(ModelAdmin):
     # search_fields = ('name',)
 
 
-@admin.register(AssociationPayment)
-class AssociationPaymentAdmin(ModelAdmin):
+@admin.register(AssociationMemberAccount)
+class AssociationMemberAccountAdmin(ModelAdmin):
 
-    list_display = ('member', 'charge', 'amount', 'date_paid')
+    list_display = ('member', 'balance', 'last_updated',)
+
+@admin.register(AssociationMemberTransaction)
+class AssociationMemberTransactionAdmin(ModelAdmin):
+
+    list_display = ('member', 'charge', 'amount', 'topup', 'date_paid')
+
+    def member(self, obj):
+        return obj.member_account.member
 
 
