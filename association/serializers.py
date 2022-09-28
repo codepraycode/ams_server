@@ -6,20 +6,15 @@ from rest_framework.validators import UniqueValidator
 
 # Serializers
 from rest_framework import serializers
-from account.serializers import LevySerializer
+from account.serializers import LevySerializer, AssociationMemberAccountSerializer
 
 # Models
 from .models import Association, AssociationGroups, AssociationMemeber
-
+from account.models import AssociationMemberAccount
 # Exceptions
 from rest_framework.exceptions import ValidationError
 
 class AssociationGroupSerializer(serializers.ModelSerializer):
-    association_id = serializers.PrimaryKeyRelatedField(
-        source="association",
-        write_only=True,
-        queryset=Association.objects.all()
-    )
 
     url = serializers.SerializerMethodField()
 
@@ -35,7 +30,6 @@ class AssociationGroupSerializer(serializers.ModelSerializer):
         model = AssociationGroups
         fields = (
             'id',
-            'association_id',
             'name',
             'url',
             'date_created'
@@ -51,16 +45,19 @@ class AssociationGroupSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
 
-        
+        request = self.context['request']
+
         name = validated_data.get('name', '')
-        association = validated_data.get('association', '')
+        # association = validated_data.get('association', '')
+        association = request.association
 
         any_name = AssociationGroups.objects.filter(
             association=association, name=name).exists()
 
         if any_name:
             raise ValidationError({"error":"Name already taken"}, code='unique')
-
+        
+        validated_data['association'] = association
         return super().create(validated_data)
 
 
@@ -153,7 +150,12 @@ class AssociationMemberSerializer(serializers.ModelSerializer):
     )
 
     group_url = serializers.SerializerMethodField()
-    topup_url = serializers.SerializerMethodField()
+
+    account = AssociationMemberAccountSerializer(read_only=True)
+
+    # def get_account(self, obj):
+    #     print(obj.account)
+    #     return {}
 
     def get_url(self, obj):
         request = self.context['request']
@@ -169,13 +171,7 @@ class AssociationMemberSerializer(serializers.ModelSerializer):
                        kwargs={"pk": int(obj.member_group.pk)})
 
         return request.build_absolute_uri(purl)
-    
-    def get_topup_url(self, obj):
-        request = self.context['request']
 
-        purl = reverse("member-topup")
-
-        return request.build_absolute_uri(purl)
     
     def get_passport_url(self, obj):
         request = self.context['request']
@@ -199,6 +195,7 @@ class AssociationMemberSerializer(serializers.ModelSerializer):
             'group',
             'group_id',
             'group_url',
+            'account',
 
             'contact',
             
@@ -214,4 +211,12 @@ class AssociationMemberSerializer(serializers.ModelSerializer):
             'date_joined',
         )
 
+    # TODO: create member account on member creation and implement it serializer
+    def create(self, validated_data):
+        instance = super().create(validated_data)
+        
+        account = AssociationMemberAccount(member=instance)
+        account.save()
+
+        return instance
 

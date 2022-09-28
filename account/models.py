@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from association.models import Association, AssociationMemeber
 # Create your models here.
@@ -75,7 +76,7 @@ class AssociationLevyCharge(models.Model):
 
 
 class AssociationMemberAccount(models.Model):
-    member = models.ForeignKey(
+    member = models.OneToOneField(
         AssociationMemeber,
         related_name="account",
         on_delete=models.CASCADE
@@ -85,6 +86,7 @@ class AssociationMemberAccount(models.Model):
         verbose_name="Account balance",
         blank=False,
         null=False,
+        default=0.0,
         decimal_places=2,
         max_digits=MAX_CHARGABLE
     )

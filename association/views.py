@@ -13,7 +13,7 @@ from .serializers import AssociationSerializer, AssociationGroupSerializer, Asso
 from .models import Association, AssociationGroups, AssociationMemeber
 
 # Permissions
-from api.permissions import IsAuthenticated, IsAssociation, IsAssociationMember
+from api.permissions import IsAuthenticated, IsAssociationGroup, IsAssociationMember
 
 
 class CreateAssociation(CreateAPIView):
@@ -68,8 +68,6 @@ class AssociationDetailView(RetrieveUpdateAPIView):
         return Response(serializer.data)
 
 
-    
-
 class CreateAssociationGroup(CreateAPIView):
     # POST
     serializer_class = AssociationGroupSerializer
@@ -82,10 +80,7 @@ class AssociationGroupDetailView(RetrieveUpdateAPIView):
     serializer_class = AssociationGroupSerializer
     parser_classes = (MultiPartParser, FormParser, JSONParser,)
     queryset = AssociationGroups.objects.all()
-    permission_classes = (IsAuthenticated, IsAssociation)
-
-
-
+    permission_classes = (IsAuthenticated, IsAssociationGroup)
 
 
 class CreateAssociationMember(ListCreateAPIView):

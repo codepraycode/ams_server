@@ -29,7 +29,7 @@ class AssociationMemberAdmin(ModelAdmin):
     search_fields = ('first_name', 'last_name')
 
     def association(self, obj):
-        return f"{obj.group.association}"
+        return f"{obj.member_group.association}"
     
     def name(self, obj):
         return obj.full_name

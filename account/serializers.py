@@ -110,7 +110,7 @@ class LevyChargeSerializer(serializers.ModelSerializer):
         return request.build_absolute_uri(purl)
 
 
-class AssociationMemberSerializer(serializers.Serializer):
+class AssociationChargeMemberSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     url = serializers.SerializerMethodField()
     passport_url = serializers.SerializerMethodField()
@@ -177,6 +177,27 @@ class AssociationMemberSerializer(serializers.Serializer):
         )
 
 
+class AssociationMemberAccountSerializer(serializers.Serializer):
+    account_id = serializers.IntegerField(source="id", read_only=True)
+    topup_url = serializers.SerializerMethodField()
+
+    balance = serializers.DecimalField(
+        max_digits=MAX_CHARGABLE,
+        min_value=0.00,
+        decimal_places=2
+    )
+
+    last_updated = serializers.DateTimeField(read_only=True)
+
+
+    def get_topup_url(self, obj):
+        request = self.context['request']
+
+        purl = reverse("member-topup")
+
+        return request.build_absolute_uri(purl)
+    
+
 class CreateAssociationPaymentSerializer(serializers.ModelSerializer):
 
     # Posting payment
@@ -184,9 +205,10 @@ class CreateAssociationPaymentSerializer(serializers.ModelSerializer):
 
     charge_id = serializers.PrimaryKeyRelatedField(
         source="charge",
-        queryset=AssociationLevyCharge.objects.all()
+        queryset=AssociationLevyCharge.objects.all(),
+        default=None,
     )
-    member_account_id = serializers.PrimaryKeyRelatedField(
+    account_id = serializers.PrimaryKeyRelatedField(
         source="member_account",
         queryset=AssociationMemberAccount.objects.all()
     )
@@ -203,7 +225,7 @@ class CreateAssociationPaymentSerializer(serializers.ModelSerializer):
         model = AssociationMemberTransaction
         fields = (
             'charge_id',
-            'member_id',
+            'account_id',
             'amount_paid',
             'topup',
             'date_paid',
@@ -217,7 +239,7 @@ class AssociationMemberPaymentSerializer(serializers.Serializer):
     # the computation is done in the model, and the data(result) is
     # serialized here
 
-    member = AssociationMemberSerializer()
+    member = AssociationChargeMemberSerializer()
     
     # payment_url = serializers.SerializerMethodField()
     settled = serializers.BooleanField()
