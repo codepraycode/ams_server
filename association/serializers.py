@@ -191,12 +191,7 @@ class AssociationMemberSerializer(serializers.ModelSerializer):
             'last_name',
             'gender',
             'occupation',
-
-            'group',
-            'group_id',
-            'group_url',
-            'account',
-
+            
             'contact',
             
             "date_of_birth",
@@ -209,9 +204,14 @@ class AssociationMemberSerializer(serializers.ModelSerializer):
             
             'next_of_kin',
             'date_joined',
+
+            'group',
+            'group_id',
+            'group_url',
+            'account',
         )
 
-    # TODO: create member account on member creation and implement it serializer
+    
     def create(self, validated_data):
         instance = super().create(validated_data)
         

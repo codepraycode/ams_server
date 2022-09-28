@@ -134,49 +134,6 @@ class AssociationMemeber(models.Model):
     def __str__(self) -> str:
         return f"{self.full_name} -- {self.member_group.association}"
     
-    @classmethod
-    def get_charge_members(cls, charge, payments_associated_with_charge):
-        response = []
-
-        # get all members associatied with charge
-        # A member is associated to charge if the member joined date is
-        #   later than the charge creation date.
-        members_associated_with_charge = cls.objects.filter(
-            group__association=charge.levy.association)
-
-        # for each member, filter payments,
-        # compute payments, and redy object reponse
-
-        for member in members_associated_with_charge:
-            member_data = {
-                "amount_paid": 0,
-                "amount_charged": charge.amount,
-                "amount_left": charge.amount,
-                "settled": False,
-                "member":member
-            }
-
-            member_payments = payments_associated_with_charge.filter(
-                member=member)
-
-            for pay in member_payments:
-                member_data['amount_paid'] += pay.amount
-
-            amount_left = float(member_data.get('amount_charged')) - float(member_data.get('amount_paid'))
-            
-            # if amount_left >= float(member_data.get('amount_charged')):
-            #     member_data['amount_left'] = amount_left
-            if amount_left <= 0:
-                member_data['amount_left'] = 0
-                member_data['settled'] = True
-            else:
-                member_data['amount_left'] = amount_left
-
-            response.append(member_data)
-
-        return response
-
-
     class Meta:
         db_table = "association_memeber_tb"
         verbose_name = "Association Member"

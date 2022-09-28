@@ -11,44 +11,9 @@ from .models import (
     AssociationMemberAccount
 )
 
-class LevySerializer(serializers.ModelSerializer):
+# Exceptions
+from rest_framework.exceptions import PermissionDenied, NotAcceptable
 
-    association_id = serializers.PrimaryKeyRelatedField(
-        source="association",
-        write_only=True,
-        queryset=Association.objects.all()
-    )
-
-    url = serializers.SerializerMethodField()
-    charges_url = serializers.SerializerMethodField()
-
-    class Meta:
-        model = AssociationLevy
-        fields = (
-            'id',
-            'label',
-            'association_id',
-            'url',
-            'charges_url',
-            'date_created',
-        )
-    
-    def get_url(self, obj):
-        request = self.context['request']
-
-        purl = reverse("levy-detail", kwargs={"pk": obj.pk})
-
-        return request.build_absolute_uri(purl)
-    
-    def get_charges_url(self, obj):
-        request = self.context['request']
-
-        purl = reverse("levycharges",
-                       kwargs={
-                        "levyId": obj.association.pk,
-        })
-
-        return request.build_absolute_uri(purl)
 
 class LevyChargeSerializer(serializers.ModelSerializer):
 
@@ -59,11 +24,10 @@ class LevyChargeSerializer(serializers.ModelSerializer):
     )
 
     url = serializers.SerializerMethodField()
+
     payment_url = serializers.SerializerMethodField()
     members_url = serializers.SerializerMethodField()
     
-    
-
     class Meta:
         model = AssociationLevyCharge
         fields = (
@@ -82,7 +46,7 @@ class LevyChargeSerializer(serializers.ModelSerializer):
         purl = reverse("levycharge-detail",
                        kwargs={
                         "pk": int(obj.pk),
-                        "levyId": obj.levy.association.pk, 
+                        # "levyId": obj.levy.association.pk, 
                     })
 
         return request.build_absolute_uri(purl)
@@ -90,11 +54,7 @@ class LevyChargeSerializer(serializers.ModelSerializer):
     def get_payment_url(self, obj):
         request = self.context['request']
 
-        purl = reverse("levycharge-payment",
-                       kwargs={
-                        "levyId": obj.levy.association.pk,
-                        "chargeId":obj.pk,
-        })
+        purl = reverse("levycharge-payment")
 
         return request.build_absolute_uri(purl)
     
@@ -103,78 +63,72 @@ class LevyChargeSerializer(serializers.ModelSerializer):
 
         purl = reverse("levychargemembers-detail",
                        kwargs={
-                        "levyId": obj.levy.association.pk,
-                        "chargeId":obj.pk,
-        })
+                        "chargePk": obj.pk,
+                        }
+        )
 
         return request.build_absolute_uri(purl)
 
 
-class AssociationChargeMemberSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
+    def create(self, validated_data):
+        request = self.context['request']
+        if validated_data['levy'].association.pk != request.association.pk:
+            raise PermissionDenied("You are not allowed to create this levy")
+        return super().create(validated_data)
+
+
+class LevySerializer(serializers.ModelSerializer):
+
     url = serializers.SerializerMethodField()
-    passport_url = serializers.SerializerMethodField()
+    create_charges_url = serializers.SerializerMethodField()
 
-    group_url = serializers.SerializerMethodField()
+    charges = LevyChargeSerializer(read_only=True, many=True)
 
-    first_name = serializers.CharField(read_only=True)
-    last_name = serializers.CharField(read_only=True)
-    gender = serializers.CharField(read_only=True)
-    occupation = serializers.CharField(read_only=True)
-    contact = serializers.CharField(read_only=True)
-    
+    class Meta:
+        model = AssociationLevy
+        fields = (
+            'id',
+            'label',
+            'url',
+            'date_created',
+            'create_charges_url',
+            'charges',
+        )
 
     def get_url(self, obj):
         request = self.context['request']
 
-        purl = reverse("associationmember-detail", kwargs={"pk": int(obj.pk)})
+        purl = reverse("levy-detail", kwargs={"pk": obj.pk})
 
         return request.build_absolute_uri(purl)
 
-    def get_group_url(self, obj):
+    def get_create_charges_url(self, obj):
         request = self.context['request']
 
-        purl = reverse("associationgroup-detail",
-                       kwargs={"pk": int(obj.group.pk)})
+        purl = reverse("levycharges")
 
         return request.build_absolute_uri(purl)
 
-    def get_passport_url(self, obj):
+    def create(self, validated_data):
         request = self.context['request']
+        validated_data['association'] = request.association
 
-        purl = obj.passport.url
+        return super().create(validated_data)
 
-        return request.build_absolute_uri(purl)
 
-    class Meta:
-        model = AssociationMemeber
-        fields = (
-            'id',
-            'url',
-            'passport',
-            'passport_url',
-            'first_name',
-            'last_name',
-            'gender',
-            'occupation',
+class AssociationChargeMemberSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    member_id = serializers.IntegerField()
 
-            'group_no',
-            'group_id',
-            'group_url',
+    balance = serializers.DecimalField(
+        max_digits=MAX_CHARGABLE,
+        min_value=0.00,
+        decimal_places=2
+    )
 
-            'contact',
-
-            "date_of_birth",
-            'religion',
-
-            'nationality',
-            'state_of_origin',
-            'ethnicity',
-            'local_government_of_origin',
-
-            'next_of_kin',
-            'date_joined',
-        )
+    def get_member_id(self, obj):
+        
+        return obj.member.pk
 
 
 class AssociationMemberAccountSerializer(serializers.Serializer):
@@ -198,7 +152,7 @@ class AssociationMemberAccountSerializer(serializers.Serializer):
         return request.build_absolute_uri(purl)
     
 
-class CreateAssociationPaymentSerializer(serializers.ModelSerializer):
+class CreateAssociationMemberPaymentSerializer(serializers.ModelSerializer):
 
     # Posting payment
     # like a receipt for a successful payment
@@ -210,15 +164,18 @@ class CreateAssociationPaymentSerializer(serializers.ModelSerializer):
     )
     account_id = serializers.PrimaryKeyRelatedField(
         source="member_account",
-        queryset=AssociationMemberAccount.objects.all()
+        queryset=AssociationMemberAccount.objects.all(),
+        required=True
     )
     amount_paid = serializers.DecimalField(
         source="amount",
         max_digits=MAX_CHARGABLE,
         min_value=0.00,
-        decimal_places=2
+        decimal_places=2,
+        required=True
     )
     topup = serializers.BooleanField(default=False)
+    from_account = serializers.BooleanField(default=False)
 
 
     class Meta:
@@ -228,9 +185,94 @@ class CreateAssociationPaymentSerializer(serializers.ModelSerializer):
             'account_id',
             'amount_paid',
             'topup',
+            'from_account',
             'date_paid',
             'date_created',
         )
+    
+    def create(self, validated_data):
+        # Validate payload
+        # if charge is none, then set topup to true
+        #  like auto top up if charge not found
+
+        # also check that the account belongs to association
+        # also check that amount is greater than 0.0
+
+        request = self.context['request']
+
+        account = validated_data.get('member_account', None)
+
+        if not account or account.member.member_group.association.pk != request.association.pk:
+            raise PermissionDenied("You have no permission to operate on this member account") # 403
+        
+        charge = validated_data.get('charge', None)
+
+        if charge and charge.levy.association.pk != request.association.pk:
+            raise PermissionDenied(
+                "You have no permission to operate on this levy charge")  # 403
+
+        # All is set
+        amount = float(validated_data.get('amount', 0.0))
+        from_account = validated_data.pop('from_account', False)
+
+        # Auto topup member account
+        isTopUp = validated_data.get('topup', False)
+        
+        if isTopUp:
+            pass
+        elif not charge:
+            validated_data['topup'] = True
+        else: # if it is a charge
+
+            if amount <= 100.0: # least amount allowed
+                raise NotAcceptable("Amount too small")
+
+
+            # Fetch all member charge payment transactions
+            member_payments = AssociationMemberTransaction.objects.filter(
+                charge=charge, member_account=account)
+            
+
+            debt = float(charge.amount) # debt is charge amount
+
+            # Go through each payment and reduce debt by amount paid
+            for each_pay in member_payments:
+                payment = float(each_pay.amount)
+
+                if debt <= 0.0: # break if debt is already settled
+                    debt = 0.0
+                    break
+
+                debt = debt - payment if debt > payment else 0
+            
+            if debt <= 0.0:
+                raise NotAcceptable(
+                    "Charge already settled")  # 406
+
+            # the technique will use account balance if from account is set
+            #  else it will combine the account balance with amount sent
+            # then the debt will be settled from the combination
+
+            balance = account.balance if from_account else amount + float(account.balance)
+
+            balance_left = float(balance) - debt
+
+
+            # amount paid is the amount sent if the debt is not less than the amount
+            # otherwise the debt
+            amount_paid = amount if debt >= amount else debt
+
+            # new acocunt balance will be 0 if balance left is 0
+            # otherwise the balance left
+            account.balance = balance_left if balance_left > 0 else 0
+            account.save() # save member account update
+            
+            # update amount paid
+            # this will prevent overflow in charge payment
+            validated_data['amount'] = amount_paid 
+            
+            
+        return super().create(validated_data)
 
 
 class AssociationMemberPaymentSerializer(serializers.Serializer):
@@ -239,7 +281,7 @@ class AssociationMemberPaymentSerializer(serializers.Serializer):
     # the computation is done in the model, and the data(result) is
     # serialized here
 
-    member = AssociationChargeMemberSerializer()
+    member_account = AssociationChargeMemberSerializer(read_only=True)
     
     # payment_url = serializers.SerializerMethodField()
     settled = serializers.BooleanField()
