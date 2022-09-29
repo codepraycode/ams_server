@@ -405,6 +405,144 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "charge_create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"levy_id\":3,\r\n    \"amount\":2500\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/account/levies/charges/create/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"account",
+								"levies",
+								"charges",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "charge_get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/account/levies/charges/6/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"account",
+								"levies",
+								"charges",
+								"6",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "charge_payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"charge_id\":6,\r\n    \"account_id\":8,\r\n    \"amount_paid\":2000,\r\n    \"description\":\"payment for levy charge\",\r\n    \"date_paid\":\"2022-9-9 01:10\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/account/levies/charges/payment/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"account",
+								"levies",
+								"charges",
+								"payment",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "charge_members",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{url}}/account/levies/charges/6/members/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"account",
+								"levies",
+								"charges",
+								"6",
+								"members",
+								""
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -626,151 +764,7 @@
 					"response": []
 				},
 				{
-					"name": "member_topup",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Token 35827a4cadb8f36b578da48bf41ec62eb9b1dfe1",
-								"type": "default"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"topup\":true,\r\n    \"amount_paid\":700,\r\n    \"account_id\":7,\r\n    \"date_paid\":\"2022-09-09\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/account/member/topup/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"account",
-								"member",
-								"topup",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Charges",
-			"item": [
-				{
-					"name": "charge_create",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Token {{token}}",
-								"type": "default"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"levy_id\":3,\r\n    \"amount\":2500\r\n}"
-						},
-						"url": {
-							"raw": "{{url}}/account/levies/charges/create/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"account",
-								"levies",
-								"charges",
-								"create",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "charge_get",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Token {{token}}",
-								"type": "default"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{url}}/account/levies/charges/6/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"account",
-								"levies",
-								"charges",
-								"6",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "charge_payment",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Token {{token}}",
-								"type": "default"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"charge_id\":6,\r\n    \"account_id\":7,\r\n    \"amount_paid\":2000,\r\n    \"date_paid\":\"2022-9-9 01:10\"\r\n}"
-						},
-						"url": {
-							"raw": "{{url}}/account/levies/charges/payment/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"account",
-								"levies",
-								"charges",
-								"payment",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "charge_members",
+					"name": "members_transactions",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -787,16 +781,50 @@
 							}
 						],
 						"url": {
-							"raw": "{{url}}/account/levies/charges/6/members/",
+							"raw": "{{url}}/account/member/8/transactions/",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"account",
-								"levies",
-								"charges",
-								"6",
-								"members",
+								"member",
+								"8",
+								"transactions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "member_topup",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"topup\":true,\r\n    \"amount_paid\":600,\r\n    \"account_id\":7,\r\n    \"description\":\"account topup\",\r\n    \"date_paid\":\"2022-09-09\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/account/member/topup/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"account",
+								"member",
+								"topup",
 								""
 							]
 						}
