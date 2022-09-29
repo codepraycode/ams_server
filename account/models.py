@@ -1,4 +1,3 @@
-from email.policy import default
 from django.db import models
 from association.models import Association, AssociationMemeber
 # Create your models here.
@@ -174,6 +173,11 @@ class AssociationMemberTransaction(models.Model):
 
     topup = models.BooleanField(default=False) # indicates if it is credit(true) or debit(false)
 
+    description = models.CharField(
+        default="not specified",
+        blank=True,
+        max_length=200
+    )
 
     def save(self, *args, **kwargs) -> None:
         

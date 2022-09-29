@@ -2,7 +2,6 @@ from django.urls import reverse
 from rest_framework import serializers
 
 # Models
-from association.models import Association, AssociationMemeber
 from .models import (
     AssociationLevy, 
     AssociationLevyCharge, 
@@ -134,6 +133,7 @@ class AssociationChargeMemberSerializer(serializers.Serializer):
 class AssociationMemberAccountSerializer(serializers.Serializer):
     account_id = serializers.IntegerField(source="id", read_only=True)
     topup_url = serializers.SerializerMethodField()
+    transactions_url = serializers.SerializerMethodField()
 
     balance = serializers.DecimalField(
         max_digits=MAX_CHARGABLE,
@@ -150,6 +150,46 @@ class AssociationMemberAccountSerializer(serializers.Serializer):
         purl = reverse("member-topup")
 
         return request.build_absolute_uri(purl)
+    
+    def get_transactions_url(self, obj):
+        request = self.context['request']
+
+        purl = reverse("member-account-transactions",
+                       kwargs={"accountPk": obj.pk})
+
+        return request.build_absolute_uri(purl)
+
+class AssociationMemberAccountTransactionSerializer(serializers.ModelSerializer):
+    account_id = serializers.SerializerMethodField()
+    levy_charge_id = serializers.SerializerMethodField()
+
+    amount = serializers.DecimalField(
+        max_digits=MAX_CHARGABLE,
+        min_value=0.00,
+        decimal_places=2
+    )
+    
+    def get_account_id(self, obj):
+        
+        return obj.member_account.pk
+    
+    def get_levy_charge_id(self, obj):
+        
+        if obj.charge:
+            return obj.charge.pk
+
+        return None
+    
+    class Meta:
+        model = AssociationMemberTransaction
+        fields = (
+            'account_id',
+            'levy_charge_id',
+            'amount',
+            'description',
+            'topup',
+            'date_paid',
+        )
     
 
 class CreateAssociationMemberPaymentSerializer(serializers.ModelSerializer):
@@ -174,6 +214,7 @@ class CreateAssociationMemberPaymentSerializer(serializers.ModelSerializer):
         decimal_places=2,
         required=True
     )
+    description = serializers.CharField(required=True)
     topup = serializers.BooleanField(default=False)
     from_account = serializers.BooleanField(default=False)
 
@@ -184,6 +225,7 @@ class CreateAssociationMemberPaymentSerializer(serializers.ModelSerializer):
             'charge_id',
             'account_id',
             'amount_paid',
+            'description',
             'topup',
             'from_account',
             'date_paid',
@@ -270,8 +312,7 @@ class CreateAssociationMemberPaymentSerializer(serializers.ModelSerializer):
             # update amount paid
             # this will prevent overflow in charge payment
             validated_data['amount'] = amount_paid 
-            
-            
+
         return super().create(validated_data)
 
 

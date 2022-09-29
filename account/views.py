@@ -10,18 +10,22 @@ from rest_framework.parsers import (MultiPartParser, FormParser, JSONParser)
 # Permissions
 from api.permissions import (IsAuthenticated, IsAssociationLevy, IsAssociationLevyCharge)
 
+# Exceptions
+from rest_framework.exceptions import PermissionDenied, NotFound
+
 # Serializers
 from .serializers import (LevySerializer, 
                         LevyChargeSerializer,
                         CreateAssociationMemberPaymentSerializer,
                         AssociationMemberPaymentSerializer,
+                        AssociationMemberAccountTransactionSerializer
                     )
 
 # Models
 from .models import (
     AssociationLevy, 
     AssociationLevyCharge, 
-    AssociationMemberTransaction
+    AssociationMemberTransaction,
 )
 
 from account.models import (
@@ -70,6 +74,47 @@ class MemberPaymentView(CreateAPIView):
     # parser_classes = (MultiPartParser, FormParser, JSONParser,)
     permission_classes = (IsAuthenticated,)
     queryset = AssociationMemberTransaction.objects.all()
+
+class MemberPaymentTransactionsView(ListAPIView):
+
+    # get a transaction for a member
+    
+    # Create and list levies
+    serializer_class = AssociationMemberAccountTransactionSerializer
+    # parser_classes = (MultiPartParser, FormParser, JSONParser,)
+    permission_classes = (IsAuthenticated,)
+    queryset = AssociationMemberTransaction.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        # grab the member pk
+        # validate member is associated to authenticated association
+        # pull all transactions that is associated to member through ok
+
+        accountPk = kwargs.get('accountPk', None)
+
+        # if no charge_id (which should be impossible), err!
+        if not accountPk:
+            raise PermissionDenied("Not allowed to fetch member account transactions")
+        
+        # try to get the charge from chargePk, err if not found
+        try:
+            account = AssociationMemberAccount.objects.get(
+                pk=accountPk, 
+                member__member_group__association=request.association
+            )
+        except AssociationMemeber.DoesNotExist:
+            raise NotFound("Member account does not exists")
+        
+        # Load all transaction associated with member
+        # serialize and return
+        
+        member_transactions = self.get_queryset().filter(member_account=account)
+
+        serializer = self.get_serializer(member_transactions, many=True)
+
+        return Response(serializer.data)
+
+
 
 
 class LevyChargeMembersView(ListAPIView):

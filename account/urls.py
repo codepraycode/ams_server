@@ -5,6 +5,7 @@ from .views import (LeviesView,
                     LevyChargesDetailView,
                     LevyChargeMembersView,
                     MemberPaymentView,
+                    MemberPaymentTransactionsView
 )
 
 urlpatterns = [
@@ -29,4 +30,7 @@ urlpatterns = [
     
     path('member/topup/', view=MemberPaymentView.as_view(),
          name="member-topup"),
+    
+    path('member/<int:accountPk>/transactions/', view=MemberPaymentTransactionsView.as_view(),
+         name="member-account-transactions"), # GET
 ]

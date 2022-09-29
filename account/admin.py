@@ -36,7 +36,7 @@ class AssociationMemberAccountAdmin(ModelAdmin):
 @admin.register(AssociationMemberTransaction)
 class AssociationMemberTransactionAdmin(ModelAdmin):
 
-    list_display = ('member', 'charge', 'amount', 'topup', 'date_paid')
+    list_display = ('member', 'charge', 'amount', 'description', 'topup', 'date_paid')
 
     def member(self, obj):
         return obj.member_account.member
